@@ -40,7 +40,7 @@ var DefaultRelay = tags.SpaceSeparatedStrings{
 }
 
 func Parse(args []string) (*ServeWebArgs, error) {
-	flagSet := flag.NewFlagSet("serveWebArgs", flag.ContinueOnError)
+	flagSet := flag.NewFlagSet("vsc", flag.ContinueOnError)
 
 	serveWebArgs := &ServeWebArgs{
 		Relay:                  new(tags.SpaceSeparatedStrings),
