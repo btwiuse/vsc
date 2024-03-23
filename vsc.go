@@ -134,12 +134,15 @@ func Run(args []string) error {
 
 	addr := fmt.Sprintf("http://%s:%d", *serveWebArgs.Host, *serveWebArgs.Port)
 	relays := *serveWebArgs.Relay
+	vsc := handler.Handler(addr)
+	vsc = utils.GinLoggerMiddleware(vsc)
+
 	if len(relays) > 1 {
 		for _, relay := range relays[1:] {
-			go wtf.Serve(relay, utils.GinLoggerMiddleware(handler.Handler(addr)))
+			go wtf.Serve(relay, vsc)
 		}
 	}
-	return wtf.Serve(relays[0], utils.GinLoggerMiddleware(handler.Handler(addr)))
+	return wtf.Serve(relays[0], vsc)
 }
 
 func executableName(quality string) string {
