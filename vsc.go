@@ -46,7 +46,7 @@ func Parse(args []string) (*ServeWebArgs, error) {
 		Relay:                  new(tags.SpaceSeparatedStrings),
 		Log:                    flagSet.String("log", "off", "Log level: {off,critical,error,warn,info,debug,trace}, defaults to 'off'."),
 		Verbose:                flagSet.Bool("verbose", false, "Verbose logging."),
-		Version:                flagSet.Bool("v", false, "Show version."),
+		Version:                flagSet.Bool("version", false, "Show version."),
 		Quality:                flagSet.String("quality", "insider", "Quality: {insider,stable,exploration}, defaults to 'insider'"),
 		Host:                   flagSet.String("host", "127.0.0.1", "Host to listen on, defaults to '127.0.0.1'"),
 		SocketPath:             flagSet.String("socket-path", "", "The path to a socket file for the server to listen to."),

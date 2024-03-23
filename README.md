@@ -19,7 +19,7 @@ Usage of serveWebArgs:
         Set the root path for extensions.
   -host string
         Host to listen on, defaults to '127.0.0.1' (default "127.0.0.1")
-  -log string                                                                                                                                                                 2 23-Mar-24
+  -log string
         Log level: {off,critical,error,warn,info,debug,trace}, defaults to 'off'. (default "off")
   -port int
         Port to listen on, defaults to 0. If 0 is passed a random free port is picked.
@@ -35,9 +35,10 @@ Usage of serveWebArgs:
         The path to a socket file for the server to listen to.
   -user-data-dir string
         Specifies the directory that user data is kept in. Can be used to open multiple distinct instances of Code.
-  -v    Show version.
   -verbose
         Verbose logging.
+  -version
+        Show version.
   -without-connection-token
         Run without a connection token. Only use this if the connection is secured by other means.
 ```
