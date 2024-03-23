@@ -14,7 +14,7 @@ require (
 	github.com/briandowns/spinner v1.23.0 // indirect
 	github.com/btwiuse/rng v0.0.0 // indirect
 	github.com/btwiuse/version v0.0.1 // indirect
-	github.com/docker/docker v25.0.1+incompatible // indirect
+	github.com/docker/docker v25.0.5+incompatible // indirect
 	github.com/ebi-yade/altsvc-go v0.1.1 // indirect
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
