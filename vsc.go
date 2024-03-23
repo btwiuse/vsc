@@ -42,7 +42,7 @@ var DefaultRelay = tags.SpaceSeparatedStrings{
 func Parse(args []string) (*ServeWebArgs, error) {
 	flagSet := flag.NewFlagSet("vsc", flag.ContinueOnError)
 
-	serveWebArgs := &ServeWebArgs{
+	VSC := &ServeWebArgs{
 		Relay:                  new(tags.SpaceSeparatedStrings),
 		Log:                    flagSet.String("log", "off", "Log level: {off,critical,error,warn,info,debug,trace}, defaults to 'off'."),
 		Verbose:                flagSet.Bool("verbose", false, "Verbose logging."),
@@ -59,50 +59,50 @@ func Parse(args []string) (*ServeWebArgs, error) {
 		UserDataDir:            flagSet.String("user-data-dir", "", "Specifies the directory that user data is kept in. Can be used to open multiple distinct instances of Code."),
 		ExtensionsDir:          flagSet.String("extensions-dir", "", "Set the root path for extensions."),
 	}
-	flagSet.Var(serveWebArgs.Relay, "relay", "Relay URL, can be specified multiple times.")
+	flagSet.Var(VSC.Relay, "relay", "Relay URL, can be specified multiple times.")
 
 	err := flagSet.Parse(args)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(*serveWebArgs.Relay) == 0 {
-		*serveWebArgs.Relay = DefaultRelay
-		if *serveWebArgs.Verbose {
+	if len(*VSC.Relay) == 0 {
+		*VSC.Relay = DefaultRelay
+		if *VSC.Verbose {
 			slog.Info("Using default relay")
 		}
 	}
 
-	if *serveWebArgs.Verbose {
-		slog.Info("relay", "relay", *serveWebArgs.Relay)
+	if *VSC.Verbose {
+		slog.Info("relay", "relay", *VSC.Relay)
 	}
 
-	if *serveWebArgs.Port == 0 {
+	if *VSC.Port == 0 {
 		randport, err := freeport.GetFreePort()
 		if err != nil {
 			return nil, err
 		}
-		*serveWebArgs.Port = randport
+		*VSC.Port = randport
 	}
 
-	return serveWebArgs, nil
+	return VSC, nil
 }
 
 func Run(args []string) error {
-	serveWebArgs, err := Parse(args)
+	VSC, err := Parse(args)
 	if err != nil {
 		return err
 	}
 
-	if *serveWebArgs.Verbose {
-		slog.Info("Parsed", "config", pretty.JSONStringLine(serveWebArgs))
+	if *VSC.Verbose {
+		slog.Info("Parsed", "config", pretty.JSONStringLine(VSC))
 	}
 
-	info, err := serveWebArgs.getLatestVersionInfo()
+	info, err := VSC.getLatestVersionInfo()
 	if err != nil {
 		return err
 	}
-	if *serveWebArgs.Verbose {
+	if *VSC.Verbose {
 		slog.Info("Latest version", "info", pretty.JSONStringLine(info))
 	}
 
@@ -113,9 +113,9 @@ func Run(args []string) error {
 	targetDir := fmt.Sprintf("%s/.vsc/cli/serve-web/%s", home, info.Version)
 	_ = os.MkdirAll(targetDir, 0755)
 
-	if !serveWebArgs.isInstalled(targetDir) {
-		slog.Info("Downloading", "version", info.Version, "quality", *serveWebArgs.Quality)
-		archive, err := serveWebArgs.downloadVersion(info.Version)
+	if !VSC.isInstalled(targetDir) {
+		slog.Info("Downloading", "version", info.Version, "quality", *VSC.Quality)
+		archive, err := VSC.downloadVersion(info.Version)
 		if err != nil {
 			return err
 		}
@@ -125,15 +125,15 @@ func Run(args []string) error {
 		}
 	}
 
-	if *serveWebArgs.Version {
-		serveWebArgs.showVersion(targetDir)
+	if *VSC.Version {
+		VSC.showVersion(targetDir)
 		os.Exit(0)
 	}
 
-	go serveWebArgs.startVersion(targetDir)
+	go VSC.startVersion(targetDir)
 
-	addr := fmt.Sprintf("http://%s:%d", *serveWebArgs.Host, *serveWebArgs.Port)
-	relays := *serveWebArgs.Relay
+	addr := fmt.Sprintf("http://%s:%d", *VSC.Host, *VSC.Port)
+	relays := *VSC.Relay
 	vsc := handler.Handler(addr)
 	vsc = utils.GinLoggerMiddleware(vsc)
 
