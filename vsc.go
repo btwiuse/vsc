@@ -135,6 +135,7 @@ func Run(args []string) error {
 	addr := fmt.Sprintf("http://%s:%d", *VSC.Host, *VSC.Port)
 	relays := *VSC.Relay
 	vsc := handler.Handler(addr)
+	vsc = utils.GzipMiddleware(vsc)
 	vsc = utils.GinLoggerMiddleware(vsc)
 
 	if len(relays) > 1 {
