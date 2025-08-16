@@ -113,6 +113,13 @@ func Run(args []string) error {
 	targetDir := fmt.Sprintf("%s/.vsc/cli/serve-web/%s", home, info.Version)
 	_ = os.MkdirAll(targetDir, 0755)
 
+	// create symlink
+	if info.Version != "latest" {
+		latestDir := fmt.Sprintf("%s/.vsc/cli/serve-web/latest", home)
+		_ = os.Remove(latestDir)
+		_ = os.Symlink(info.Version, latestDir)
+	}
+
 	if !VSC.isInstalled(targetDir) {
 		slog.Info("Downloading", "version", info.Version, "quality", *VSC.Quality)
 		archive, err := VSC.downloadVersion(info.Version)
